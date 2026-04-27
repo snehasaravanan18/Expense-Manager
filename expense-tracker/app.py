@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -64,10 +64,15 @@ CATEGORIES = [
 
 @app.route("/")
 def index():
+    return render_template("add.html", categories=CATEGORIES)
+
+
+@app.route("/expenses")
+def expenses():
     conn = get_db()
     cur = conn.cursor()
     cur.execute("SELECT * FROM expenses ORDER BY created_at DESC")
-    expenses = cur.fetchall()
+    all_expenses = cur.fetchall()
     cur.execute("SELECT SUM(amount) FROM expenses")
     total = cur.fetchone()[0] or 0.0
     cur.execute(
@@ -76,10 +81,9 @@ def index():
     chart_data = cur.fetchall()
     conn.close()
     return render_template(
-        "index.html",
-        expenses=expenses,
+        "expenses.html",
+        expenses=all_expenses,
         total=total,
-        categories=CATEGORIES,
         chart_labels=[row["category"] for row in chart_data],
         chart_values=[row["total"] for row in chart_data],
     )
@@ -103,7 +107,7 @@ def add_expense():
     )
     conn.commit()
     conn.close()
-    return redirect(url_for("index"))
+    return redirect(url_for("expenses"))
 
 
 @app.route("/delete/<int:expense_id>", methods=["POST"])
@@ -112,7 +116,7 @@ def delete_expense(expense_id):
     conn.execute("DELETE FROM expenses WHERE id = ?", (expense_id,))
     conn.commit()
     conn.close()
-    return redirect(url_for("index"))
+    return redirect(url_for("expenses"))
 
 
 if __name__ == "__main__":
