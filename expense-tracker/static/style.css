@@ -41,7 +41,7 @@ body {
   color: #fff;
   padding: 42px 0 48px;
   margin-bottom: 36px;
-  clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+  pointer-events: none;
 }
 
 .hero-inner {
@@ -53,6 +53,7 @@ body {
   justify-content: space-between;
   gap: 24px;
   flex-wrap: wrap;
+  pointer-events: auto;
 }
 
 .hero h1 {
