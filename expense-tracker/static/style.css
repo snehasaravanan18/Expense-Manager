@@ -33,6 +33,13 @@ body {
   max-width: 1040px;
   margin: 0 auto;
   padding: 0 24px 60px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Force interactability on all form elements ── */
+input, select, textarea, button, a, label {
+  pointer-events: auto;
 }
 
 /* ── Header / Hero ── */
@@ -42,6 +49,8 @@ body {
   padding: 42px 0 48px;
   margin-bottom: 36px;
   pointer-events: none;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-inner {
